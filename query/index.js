@@ -21,7 +21,7 @@ app.post('/events', (req, res, next) => {
 		posts[id] = { id, title, comments: [] };
 	}
 
-	if (type === 'CommentCreted') {
+	if (type === 'CommentCreated') {
 		const { id, content, postId } = data;
 
 		const post = posts[postId];
