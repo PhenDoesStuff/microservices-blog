@@ -9,9 +9,9 @@ app.post('/events', (req, res, next) => {
 	const event = req.body;
 
 	try {
-		axios.post('http://localhost:4002/events', event);
+		axios.post('http://localhost:4000/events', event);
 	} catch (err) {
-		console.log('Error trying to post message to the query service.', err);
+		console.log('Error trying to post message to the post service.', err);
 		return next(err);
 	}
 
@@ -26,9 +26,19 @@ app.post('/events', (req, res, next) => {
 	}
 
 	try {
-		axios.post('http://localhost:4000/events', event);
+		axios.post('http://localhost:4002/events', event);
 	} catch (err) {
-		console.log('Error trying to post message to the post service.', err);
+		console.log('Error trying to post message to the query service.', err);
+		return next(err);
+	}
+
+	try {
+		axios.post('http://localhost:4003/events', event);
+	} catch (err) {
+		console.log(
+			'Error trying to post message to the moderation service.',
+			err
+		);
 		return next(err);
 	}
 
