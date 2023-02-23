@@ -12,7 +12,7 @@ app.post('/events', (req, res, next) => {
 		axios.post('http://localhost:4000/events', event);
 	} catch (err) {
 		console.log('Error trying to post message to the post service.', err);
-		return next(err);
+		return next(err.message);
 	}
 
 	try {
@@ -22,14 +22,14 @@ app.post('/events', (req, res, next) => {
 			'Error trying to post message to the comment service.',
 			err
 		);
-		return next(err);
+		return next(err.message);
 	}
 
 	try {
 		axios.post('http://localhost:4002/events', event);
 	} catch (err) {
 		console.log('Error trying to post message to the query service.', err);
-		return next(err);
+		return next(err.message);
 	}
 
 	try {
@@ -37,9 +37,9 @@ app.post('/events', (req, res, next) => {
 	} catch (err) {
 		console.log(
 			'Error trying to post message to the moderation service.',
-			err
+			err.message
 		);
-		return next(err);
+		return next(err.message);
 	}
 
 	res.status(200).json({ status: 'OK' });
