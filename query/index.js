@@ -8,13 +8,7 @@ app.use(cors());
 
 const posts = {};
 
-app.get('/posts', (req, res, next) => {
-	res.send(posts);
-});
-
-app.post('/events', (req, res, next) => {
-	const { type, data } = req.body;
-
+const handleEvent = (type, data) => {
 	if (type === 'PostCreated') {
 		const { id, title } = data;
 
@@ -40,12 +34,30 @@ app.post('/events', (req, res, next) => {
 		comment.status = status;
 		comment.content = content;
 	}
+};
 
-	console.log(posts);
+app.get('/posts', (req, res, next) => {
+	res.send(posts);
+});
+
+app.post('/events', (req, res, next) => {
+	const { type, data } = req.body;
+
+	handleEvent(type, data);
 
 	res.status(200);
 });
 
-app.listen(4002, () => {
+app.listen(4002, async () => {
 	console.log('Listening on 4002');
+
+	try {
+		const events = await axios.get('http://localhost:4005/events');
+
+		for (let event of events.data) {
+			console.log('Processing event: ', event.type);
+
+			handleEvent(event.type, event.data);
+		}
+	} catch {}
 });
