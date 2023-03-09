@@ -12,39 +12,25 @@ app.post('/events', (req, res, next) => {
 
 	events.push(event);
 
-	try {
-		axios.post('http://localhost:4000/events', event);
-	} catch (err) {
-		console.log('Error trying to post message to the post service.', err);
-		return next(err.message);
-	}
+	axios.post('http://localhost:4000/events', event).catch(function () {
+		console.log('Error trying to post message to the post service.');
+		return res.status(500);
+	});
 
-	try {
-		axios.post('http://localhost:4001/events', event);
-	} catch (err) {
-		console.log(
-			'Error trying to post message to the comment service.',
-			err
-		);
-		return next(err.message);
-	}
+	axios.post('http://localhost:4001/events', event).catch(function () {
+		console.log('Error trying to post message to the comment service.');
+		return res.status(500);
+	});
 
-	try {
-		axios.post('http://localhost:4002/events', event);
-	} catch (err) {
-		console.log('Error trying to post message to the query service.', err);
-		return next(err.message);
-	}
+	axios.post('http://localhost:4002/events', event).catch(function () {
+		console.log('Error trying to post message to the query service.');
+		return res.status(500);
+	});
 
-	try {
-		axios.post('http://localhost:4003/events', event);
-	} catch (err) {
-		console.log(
-			'Error trying to post message to the moderation service.',
-			err.message
-		);
-		return next(err.message);
-	}
+	axios.post('http://localhost:4003/events', event).catch(function () {
+		console.log('Error trying to post message to the moderation service.');
+		return next(res.status(500));
+	});
 
 	res.status(200).json({ status: 'OK' });
 });

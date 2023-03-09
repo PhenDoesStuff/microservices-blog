@@ -22,17 +22,16 @@ app.post('/posts', async (req, res, next) => {
 		id,
 		title,
 	};
-	try {
-		await axios.post('http://localhost:4005/events', {
+
+	await axios
+		.post('http://localhost:4005/events', {
 			type: 'PostCreated',
 			data: {
 				id,
 				title,
 			},
-		});
-	} catch (err) {
-		return next(err);
-	}
+		})
+		.catch('There was an error reaching out to the event bus.');
 
 	res.status(201).send(posts[id]);
 });

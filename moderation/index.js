@@ -13,8 +13,8 @@ app.post('/events', async (req, res, next) => {
 			? 'Rejected'
 			: 'Approved';
 
-		try {
-			await axios.post('http://localhost:4005/events', {
+		await axios
+			.post('http://localhost:4005/events', {
 				type: 'CommentModerated',
 				data: {
 					id: data.id,
@@ -22,10 +22,8 @@ app.post('/events', async (req, res, next) => {
 					status,
 					content: data.content,
 				},
-			});
-		} catch (err) {
-			return next(err.message);
-		}
+			})
+			.catch('There was an error reaching out to the event bus.');
 	}
 
 	res.status(200).json({ status: 'ok' });

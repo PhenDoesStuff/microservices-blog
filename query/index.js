@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const axios = require('axios');
 const cors = require('cors');
 
 const app = express();
@@ -51,13 +52,13 @@ app.post('/events', (req, res, next) => {
 app.listen(4002, async () => {
 	console.log('Listening on 4002');
 
-	try {
-		const events = await axios.get('http://localhost:4005/events');
+	const events = await axios
+		.get('http://localhost:4005/events')
+		.catch('There was an error reaching out to the event bus.');
 
-		for (let event of events.data) {
-			console.log('Processing event: ', event.type);
+	for (let event of events.data) {
+		console.log('Processing event: ', event.type);
 
-			handleEvent(event.type, event.data);
-		}
-	} catch {}
+		handleEvent(event.type, event.data);
+	}
 });

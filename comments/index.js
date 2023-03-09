@@ -24,8 +24,8 @@ app.post('/posts/:id/comments', async (req, res, next) => {
 
 	commentsByPostId[req.params.id] = comments;
 
-	try {
-		await axios.post('http://localhost:4005/events', {
+	await axios
+		.post('http://localhost:4005/events', {
 			type: 'CommentCreated',
 			data: {
 				id: commentId,
@@ -33,10 +33,10 @@ app.post('/posts/:id/comments', async (req, res, next) => {
 				postId: req.params.id,
 				status: 'Pending',
 			},
-		});
-	} catch (err) {
-		return next(err);
-	}
+		})
+		.catch(
+			console.log('There was an error reaching out to the event bus.')
+		);
 
 	res.status(201).send(comments);
 });
@@ -56,8 +56,8 @@ app.post('/events', async (req, res, next) => {
 		});
 		comment.status = status;
 
-		try {
-			await axios.post('http://localhost:4005/events', {
+		await axios
+			.post('http://localhost:4005/events', {
 				type: 'CommentUpdated',
 				data: {
 					id,
@@ -65,10 +65,8 @@ app.post('/events', async (req, res, next) => {
 					postId,
 					content,
 				},
-			});
-		} catch (err) {
-			return next(`An error occurred: ${err.message}`);
-		}
+			})
+			.catch('There was an error reaching out to the event bus.');
 	}
 
 	res.status(200);
