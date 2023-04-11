@@ -17,7 +17,7 @@ spec:
                 - name: posts
                   image: stephenmontague/posts
 ---
-# Service Configuration
+# Cluster IP Service Configuration
 apiVersion: v1
 kind: Service
 metadata:
