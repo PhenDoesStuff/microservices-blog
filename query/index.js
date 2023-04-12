@@ -53,7 +53,7 @@ app.listen(4002, async () => {
 	console.log('Listening on 4002');
 
 	const events = await axios
-		.get('http://localhost:4005/events')
+		.get('http://event-bus-srv:4005/events')
 		.catch('There was an error reaching out to the event bus.');
 
 	for (let event of events.data) {

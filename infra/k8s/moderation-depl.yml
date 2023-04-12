@@ -1,0 +1,33 @@
+# Deployment Configuration
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: moderation-depl
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: moderation
+    template:
+        metadata:
+            labels:
+                app: moderation
+        spec:
+            containers:
+                - name: moderation
+                  image: stephenmontague/moderation
+---
+# Service Configuration
+apiVersion: v1
+kind: Service
+metadata:
+    name: moderation-srv
+spec:
+    type: ClusterIP # Kubernetes defaults to this so it is not necessary to include
+    selector:
+        app: moderation
+    ports:
+        - name: moderation
+          protocol: TCP
+          port: 4003
+          targetPort: 4003

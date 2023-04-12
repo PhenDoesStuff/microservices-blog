@@ -1,0 +1,33 @@
+# Deployment Configuration
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: query-depl
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: query
+    template:
+        metadata:
+            labels:
+                app: query
+        spec:
+            containers:
+                - name: query
+                  image: stephenmontague/query
+---
+# Service Configuration
+apiVersion: v1
+kind: Service
+metadata:
+    name: query-srv
+spec:
+    type: ClusterIP # Kubernetes defaults to this so it is not necessary to include
+    selector:
+        app: query
+    ports:
+        - name: query
+          protocol: TCP
+          port: 4002
+          targetPort: 4002
